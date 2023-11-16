@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import "../estilos/formulario.css";
 
 const Formulario = () => {
@@ -10,6 +10,15 @@ const Formulario = () => {
     const [errores, setErrores] = useState({ nombre: "", apellido: "", email: "", terminos: "" });
     const [formValido, setFormValido] = useState(false);
     
+    const [terminosOk, setTerminosOk] = useState(false);
+    const [nombreOk, setNombreOk] = useState(false);
+    const [apellidoOk, setApellidoOk] = useState(false);
+    const [emailOk, setEmailOk] = useState(false);
+
+   
+
+
+
     const [caracteresRestantes, setCaracteresRestantes] = useState(500);
     const [mensaje, setMensaje] = useState("")
     const handleMensaje = (e) =>{
@@ -25,72 +34,72 @@ const Formulario = () => {
         };
 
 
-  const validarFormulario = () => {
+  const validarFormulario = useCallback(() => { 
     let errores = {};
-    let formValido = true;
+    let formValido = false;
    
     // Validación del nombre
-    if (nombre === "") {
-      formValido = false;
-      errores.nombre = "El nombre no puede estar vacío.";
-    }else if(nombre.length > 10){
-        formValido = false;
-        errores.nombre = "El nombre no puede superar los 10 carácteres";
+    if (nombre.length <=10  && nombre.length > 0) {
+      setNombreOk(true)
+      
+    }else{
+        
+        errores.nombre = "El nombre no puede superar los 10 carácteres ni estarvacío";
     }
     // Validación del apelidos
-    if (apellido === "") {
-        formValido = false;
-        errores.apellido = "El apellido no puede estar vacío.";
-      }else if(nombre.length > 10){
-          formValido = false;
-          errores.apellido = "El apellido no puede superar los 10 carácteres";
-      }
+    if (apellido.length <=20  && apellido.length > 0) {
+      setApellidoOk(true)
+      
+    }else{
+        
+        errores.apellido = "El apellido no puede superar los 20 carácteres ni estarvacío";
+    }
 
     // Validación del email
-    if (email === "") {
-      formValido = false;
-      errores.email = "El email no puede estar vacío.";
-    }else if(email.length > 20){
-        formValido = false;
-        errores.email = "El email no puede superar los 20 carácteres.";
-    }else if(!email.includes("@")){
-        formValido = false;
-        errores.email = "El email debe contener el caracter @.";
-    }
-
-    //Validacion de los terminos
-    if(terminos === false){
-        formValido = false;
-        errores.terminos = "Debe aceptar los términos y condiciones de uso.";
-    }
-
-    setErrores(errores);
-    setFormValido(formValido);
-  };
-  
-
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    validarFormulario();
-  };
-
-  useEffect(() => {
-   
-    if (formValido) {
+    if (email.includes("@") && email.length > 0 && email.length <= 20) {
+      setEmailOk(true)
+      
+    }else{
         
-        setNombre("")
-        setApellido("")
-        setEmail("")
-        setSexo("hombre")
-        setTerminos(false)
-        setMensaje("")
-        return alert('Datos enviados correctamente');
+        errores.email = "El email no puede superar los 20 carácteres, ni estar vacío. Ademas debe contener el carácter @";
+    }
+    //Validacion de los terminos
+    if(terminos === true){
+        setTerminosOk(true)
+       
+    }else{
+      errores.terminos = "Debe aceptar los términos y condiciones de uso.";
       
-      
+    }
+    if(nombreOk && apellidoOk && emailOk && terminosOk){
+        formValido = true;
+        setFormValido(formValido);
     }
     
-  }, [formValido]);
+    setErrores(errores);
+    
+  },[nombre, apellido, email, terminos, nombreOk, apellidoOk, emailOk, terminosOk])
+  
+
+  function handleSubmit(e){
+    e.preventDefault();
+    if(formValido){
+      setApellido("")
+      setNombre("")
+      setEmail("")
+      setMensaje("")
+      setCaracteresRestantes(500)
+      setFormValido(false)
+      setTerminos(false)
+      return alert('Datos enviados correctamente');
+    }
+    
+  };
+
+  
+  useEffect(() => {
+    validarFormulario()
+  }, [formValido,validarFormulario]);
 
   return (
     <form onSubmit={handleSubmit} className="formulario">
