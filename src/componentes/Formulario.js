@@ -16,9 +16,6 @@ const Formulario = () => {
     const [emailOk, setEmailOk] = useState(false);
 
    
-
-
-
     const [caracteresRestantes, setCaracteresRestantes] = useState(500);
     const [mensaje, setMensaje] = useState("")
     const handleMensaje = (e) =>{
@@ -43,15 +40,15 @@ const Formulario = () => {
       setNombreOk(true)
       
     }else{
-        
-        errores.nombre = "El nombre no puede superar los 10 carácteres ni estarvacío";
+      setNombreOk(false)
+        errores.nombre = "El nombre no puede superar los 10 carácteres ni estar vacío";
     }
     // Validación del apelidos
     if (apellido.length <=20  && apellido.length > 0) {
       setApellidoOk(true)
       
     }else{
-        
+      setApellidoOk(false)
         errores.apellido = "El apellido no puede superar los 20 carácteres ni estarvacío";
     }
 
@@ -60,7 +57,7 @@ const Formulario = () => {
       setEmailOk(true)
       
     }else{
-        
+      setEmailOk(false)
         errores.email = "El email no puede superar los 20 carácteres, ni estar vacío. Ademas debe contener el carácter @";
     }
     //Validacion de los terminos
@@ -68,12 +65,16 @@ const Formulario = () => {
         setTerminosOk(true)
        
     }else{
+      setTerminosOk(false)
       errores.terminos = "Debe aceptar los términos y condiciones de uso.";
       
     }
     if(nombreOk && apellidoOk && emailOk && terminosOk){
         formValido = true;
         setFormValido(formValido);
+    }else{
+      formValido = false;
+      setFormValido(formValido);
     }
     
     setErrores(errores);
@@ -84,6 +85,12 @@ const Formulario = () => {
   function handleSubmit(e){
     e.preventDefault();
     if(formValido){
+      //mandar datos
+
+      setNombreOk(false)
+      setApellidoOk(false)
+      setEmailOk(false)
+      setTerminosOk(false)
       setApellido("")
       setNombre("")
       setEmail("")
@@ -99,18 +106,18 @@ const Formulario = () => {
   
   useEffect(() => {
     validarFormulario()
-  }, [formValido,validarFormulario]);
+  }, [validarFormulario]);
 
   return (
     <form onSubmit={handleSubmit} className="formulario">
       <div>
       <h3>Rellene el formulario</h3>
         <p>Nombre: <input type="text" onChange={(e) => setNombre(e.target.value)}  value = {nombre}/></p>
-        <p >{errores.nombre && <p style={{ color: 'red' }}>{errores.nombre}</p>}</p>
+        <p className="texto-rojo">{errores.nombre}</p>
         <p>Apellidos: <input type="text" onChange={(e) => setApellido(e.target.value)}  value = {apellido}/></p>
-        <p>{errores.apellido && <p style={{ color: 'red' }}>{errores.apellido}</p>}</p>
+        <p className="texto-rojo">{errores.apellido}</p>
         <p>Email: <input type="text" onChange={(e) => setEmail(e.target.value)}  value = {email}/></p>
-        <p>{errores.email && <p style={{ color: 'red' }}>{errores.email}</p>}</p>
+        <p className="texto-rojo">{errores.email}</p>
         <p>Sexo: <select value={sexo || ""} onChange={(e) => setSexo(e.target.value)}>
             <option value="hombre">Hombre</option>
             <option value="mujer">Mujer</option>                            
@@ -119,11 +126,11 @@ const Formulario = () => {
         <p>Mensaje: <textarea value={mensaje} onChange={handleMensaje} /></p>
         <p>Te quedan {caracteresRestantes} carácteres</p>           
             <p><input type="checkbox" value={terminos} onChange={() => setTerminos(!terminos)} checked={terminos}/> Aceptar teminos y condiciones de uso</p>
-        <p>{errores.terminos && <p style={{ color: 'red' }}>{errores.terminos}</p>}</p>
+            <p className="texto-rojo">{errores.terminos}</p>
             
       </div>
 
-      <button type="submit">Enviar</button>
+      <button className={formValido ? "boton-verde" : "boton-rojo"}type="submit">Enviar</button>
     </form>
   );
 };

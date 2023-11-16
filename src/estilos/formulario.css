@@ -1,6 +1,16 @@
 .formulario {
-    border: 2px solid #ddd; /* Establece un borde de 2 píxeles de ancho y color gris claro */
-    padding: 20px; /* Añade espacio interno alrededor del formulario */
-    width: 300px; /* Puedes ajustar el ancho según tus necesidades */
-    margin: auto; /* Centra el formulario en la página */
+    border: 2px solid #ddd; 
+    padding: 20px;
+    width: 300px; 
+    margin: auto;
+    background-color: aquamarine;
   }
+.texto-rojo {
+    color: red;
+}
+.boton-verde{
+  background-color: green;
+}
+.boton-rojo{
+  background-color: red;
+}
