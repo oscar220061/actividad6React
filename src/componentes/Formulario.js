@@ -6,7 +6,7 @@ const Formulario = () => {
     const [nombre, setNombre] = useState("");
     const [apellido, setApellido] = useState("");
     const [email, setEmail] = useState("");
-    const [sexo, setSexo] = useState(null);
+    const [sexo, setSexo] = useState("Hombre");
     const [errores, setErrores] = useState({ nombre: "", apellido: "", email: "", terminos: "" });
     const [formValido, setFormValido] = useState(false);
     
@@ -118,7 +118,7 @@ const Formulario = () => {
         <p className="texto-rojo">{errores.apellido}</p>
         <p>Email: <input type="text" onChange={(e) => setEmail(e.target.value)}  value = {email}/></p>
         <p className="texto-rojo">{errores.email}</p>
-        <p>Sexo: <select value={sexo || ""} onChange={(e) => setSexo(e.target.value)}>
+        <p>Sexo: <select value={sexo} onChange={(e) => setSexo(e.target.value)}>
             <option value="hombre">Hombre</option>
             <option value="mujer">Mujer</option>                            
         </select></p>
